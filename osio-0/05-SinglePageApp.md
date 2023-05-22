@@ -1,3 +1,5 @@
+This is a sequence diagrman for when the user open the Single Page App page:
+```mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -30,3 +32,4 @@ sequenceDiagram
     activate server
     server-->>browser: HTML document (should be type image/x-icon)
     deactivate server
+```

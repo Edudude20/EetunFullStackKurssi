@@ -1,3 +1,5 @@
+Here is a sequence diagram when a user creates a new note:
+```mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -32,4 +34,5 @@ sequenceDiagram
     server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
     deactivate server    
 
-    Note right of browser: The browser executes the callback function that renders the notes 
+    Note right of browser: The browser executes the callback function that renders the notes
+```

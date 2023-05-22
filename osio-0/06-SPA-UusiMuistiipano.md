@@ -1,3 +1,5 @@
+This is a sequence diagram for when the user creates a new note in SPA page
+```mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -7,3 +9,4 @@ sequenceDiagram
 
     Note right of browser: HTTML status code: 201 Created. Browser does not reload
     deactivate server
+```
