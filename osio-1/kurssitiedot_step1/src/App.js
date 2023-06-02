@@ -1,5 +1,5 @@
 const Header = (props) => {
-  console.log(props);
+  //console.log(props);
 
   return (
     <>
@@ -13,13 +13,23 @@ const Header = (props) => {
 const Content = (props) => {
   console.log(props);
   return (
-    <p>{props.name}, tasks {props.amount}</p>
+    <div>
+      <Part />
+    </div>
+
 
   );
 };
 
+const Part = (props) => {
+  return (
+    <p>{props.name} {props.amount}</p>
+  )
+};
+
+
 const Total = (props) => {
-  console.log(props);
+  //console.log(props);
 
   return (
     <p>
@@ -41,9 +51,7 @@ const App = () => {
   return (
     <div>
       <Header courseName={course} />
-      <Content name={part1} amount={exercises1} />
-      <Content name={part2} amount={exercises2} />
-      <Content name={part3} amount={exercises3} />
+      <Content part={part1} exercises1={exercises1} part2={part2} exercises2={exercises2} part3={part3} exercises3={exercises3}/>
       <Total amount={exercises1 + exercises2 + exercises3} />
     </div>
   )
