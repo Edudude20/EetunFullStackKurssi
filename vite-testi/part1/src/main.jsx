@@ -4,7 +4,10 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 //import reportWebVitals from './reportWebVitals';
 
-//Päätin pitää tämän, koska uskon, että StrictModesta voisi olla hyötyä.
+//Päätin pitää tämän, koska uskon, että StrictModesta voisi olla hyötyä.EDIT: se renderöi 
+//hassusti neljä kertaa? Ilman Strict modea se näyttää oikealta konsolissa, mutta sen vieressä lukee 2?
+
+/*
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -12,8 +15,8 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-//ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+*/
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
