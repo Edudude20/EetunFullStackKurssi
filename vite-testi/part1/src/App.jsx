@@ -24,13 +24,13 @@ const Display = ({ counter }) => {
   return <div>{counter}</div>;
 };
 
-const Nappi = ({ handleClick, text}) => {
-  return <button onClick={handleClick}>
-    {text}
-    </button>;
+const Nappi = ({ handleClick, text }) => {
+  return <button onClick={handleClick}>{text}</button>;
 };
 
 const App = () => {
+  //#region 1a,b,c
+
   const nimi = "Pekka";
   const ika = 10;
   const [counter, setCounter] = useState(0); //useState-hookin avulla luodaan sovellukselle laskurin tilan counter ja asettaa sen tilaksi 0
@@ -38,7 +38,8 @@ const App = () => {
   //Tilaa muuttavan funktion kutsuminen aiheuttaa komponentin uudelleenrenderöitymisen
   console.log("rendering with counter value", counter);
 
-  /* TIMER COUNTER
+  //TIMER COUNTER
+  /*
   setTimeout(() => {
     setCounter(counter + 1);
   }, 1000);
@@ -59,6 +60,28 @@ const App = () => {
     setCounter(counter - 1);
   };
 
+  //#endregion
+
+  //#region 1d
+  const [left, setLeft] = useState(0);
+  const [right, setRight] = useState(0);
+  /*
+  const [clicks, setClicks] = useState({
+    left: 0,
+    right: 0
+  });
+  */
+
+  const handleLeftClick = () => {
+    setLeft(left + 1);
+  };
+
+  const handleRightClick = () => {
+    setRight(right + 1);
+  };
+
+  //#endregion
+
   return (
     <>
       <Display counter={counter} />
@@ -69,6 +92,12 @@ const App = () => {
       <h1>Greetings</h1>
       <Hello name="Maya" age={26 + 10} />
       <Hello name={nimi} age={ika} />
+      <div>
+        {left}
+        <button onClick={handleLeftClick}>left</button>
+        <button onClick={handleRightClick}>right</button>
+        {right}
+      </div>
     </>
   );
 };
