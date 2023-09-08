@@ -1,10 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+// eslint-disable-next-line no-unused-vars
+import React from "react";
+import ReactDOM from "react-dom/client";
+//import './index.css';
+import App from "./App";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+/*Päätin pitää tämän, koska uskon, että StrictModesta voisi olla hyötyä. 
+EDIT: se renderöi 
+hassusti neljä kertaa? Ilman Strict modea se näyttää oikealta konsolissa, mutta sen vieressä lukee 2?
+*/
+
+/*
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
+*/
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
