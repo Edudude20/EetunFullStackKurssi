@@ -83,6 +83,7 @@ function App() {
     "The only way to go fast, is to go well.",
   ];
   const [selected, setSelected] = useState(0);
+  const [mostVotes, setmostVotes] = useState(0);
   const [points, setPoints] = useState(new Array(anectodes.length).fill(0));
   //#endregion
 
@@ -123,6 +124,19 @@ function App() {
     copyPoints[selected] += 1;
     console.log("copied points array after: ", copyPoints);
     setPoints(copyPoints);
+
+
+    let largest = copyPoints[0];
+    let position = 0;
+    for (let index = 0; index < copyPoints.length; index++) {
+      if (copyPoints[index] > largest) {
+        largest = copyPoints[index];
+        position = index;
+      }
+    }
+    console.log("largest number: ",largest, "position: ", position);
+    const updatedPosition = position;
+    setmostVotes(updatedPosition);
   };
   //#endregion
 
@@ -148,13 +162,16 @@ function App() {
         neutral={neutral}
         total={total}
       ></Statistics>
-      <div>{anectodes[selected]}</div>
+      <h2>Anectode of the day:</h2>
+      <p>{anectodes[selected]}</p>
       <Button
         handleClick={handleRandomSelectedAnectode}
         text="next anectode"
       ></Button>
-      <Button handleClick={handleVote} text="vote this anectode"></Button>
       <p>this anectode has {points[selected]} votes</p>
+      <Button handleClick={handleVote} text="vote this anectode"></Button>
+      <h2>Anectode with the most votes:</h2>
+      <p>{anectodes[mostVotes]}</p>
     </>
   );
 }
