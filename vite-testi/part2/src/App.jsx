@@ -1,14 +1,27 @@
 /* eslint-disable react/prop-types */
 import Note from "./components/Note";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function App(props) {
+function App() {
   //const mapNotes = notes.map(note => note.content);
   //console.log(mapNotes);
 
-  const [notes, setNotes] = useState(props.notes);
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note");
   const [showAll, setshowAll] = useState(true);
+
+  useEffect(() => {
+    console.log('effect');
+    axios
+    .get('http://localhost:3001/notes')
+    .then(response => {
+      console.log('promise fulfilled');
+      setNotes(response.data)
+    })
+  }, []); //Will only run after the initial render (expect once in development)
+
+  console.log('render', notes.length, 'notes');
 
   const addNote = (event) => {
     event.preventDefault();
