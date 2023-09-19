@@ -32,15 +32,21 @@ function App() {
       important: Math.random() > 0.5,
       id: notes.length + 1
     }
-
-    setNotes(notes.concat(noteObject));
-    setNewNote('');
+    axios.post('http://localhost:3001/notes', noteObject).then(response =>{
+      console.log((response));
+      setNotes(notes.concat(noteObject));
+      setNewNote('');
+    })
   };
 
   const handleNoteChange = (event) => {
     console.log(event.target.value);
     setNewNote(event.target.value);
   };
+
+  const toggleImportanceOf = (id) => {
+    console.log(`importance of ${id} need to be toggled`);
+  }
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important === true);
 
@@ -55,7 +61,7 @@ function App() {
         </div>
         <ul>
           {notesToShow.map((note) => (
-            <Note key={note.id} note={note}></Note>
+            <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}></Note>
           ))}
         </ul>
         <form onSubmit={addNote}>
