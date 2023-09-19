@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PersonForm = (props) => {
-
   return (
     <form onSubmit={props.addPerson}>
       <div>
@@ -36,17 +36,24 @@ const Persons = ({ persons }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: "Arto Hellas",
-      number: "+358 123412312",
-    },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("name");
   const [newNumber, setNewNumber] = useState("+123 456 7890");
 
   // const result = persons.map((person) => person.name);
   // //console.log(result);
+
+  useEffect(() => {
+    console.log("effect");
+    axios
+    .get("http://localhost:3001/persons")
+    .then((response) => {
+      console.log("promise fulfilled");
+      setPersons(response.data);
+    });
+  }, []); //Will only run after the initial render (expect once in development)
+
+  console.log("render", persons.length, "notes");
 
   const handleNameChange = (event) => {
     //console.log(event.target.value);
@@ -80,7 +87,13 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}></PersonForm>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      ></PersonForm>
       <h2>Numbers</h2>
       <Persons persons={persons}></Persons>
     </div>
