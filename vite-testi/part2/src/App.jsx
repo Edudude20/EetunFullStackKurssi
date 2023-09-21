@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     console.log("effect");
-    noteService.getAll().then(initialNotes => {
+    noteService.getAll().then((initialNotes) => {
       console.log("promise fulfilled");
       setNotes(initialNotes);
     });
@@ -22,7 +22,7 @@ function App() {
   console.log("render", notes.length, "notes");
 
   const addNote = (event) => {
-    event.preventDefault();
+    event.preventDefault(); //estää lomakkeen lähetyksen oletusarvoisen toiminnan, joka aiheuttaisi mm. sivun uudelleenlatautumisen
     console.log("button clicked", event.target);
 
     const noteObject = {
@@ -30,10 +30,10 @@ function App() {
       important: Math.random() > 0.5,
     };
 
-   noteService.create(noteObject).then(returnedNote => {
+    noteService.create(noteObject).then((returnedNote) => {
       console.log(returnedNote);
       setNotes(notes.concat(returnedNote));
-      setNewNote('');
+      setNewNote("");
     });
   };
 
@@ -48,17 +48,20 @@ function App() {
     const note = notes.find((e) => e.id === noteID); //e = element
     const changedNote = { ...note, important: !note.important };
 
-   noteService.update(noteID, changedNote).then((returnedNote) => {
-      setNotes(
-        notes.map((note) => (note.id !== noteID ? note : returnedNote))
-      );
-      //jos ehto on tosi, otetaan uuteen taulukkoon suoraan vanha taulukon kyseinen alkio {note}
-      //Jos ehto on epätosi, eli kyseessä on muutettu muistiinpano, otetaan palvelimen palauttama olio {response.data}
-    }).catch(error => {
-      console.error(error);
-      alert(`the note '${note.content}' was already deleted form server`);
-      setNotes(notes.filter(e => e.id !== noteID))
-    });
+    noteService
+      .update(noteID, changedNote)
+      .then((returnedNote) => {
+        setNotes(
+          notes.map((note) => (note.id !== noteID ? note : returnedNote))
+        );
+        //jos ehto on tosi, otetaan uuteen taulukkoon suoraan vanha taulukon kyseinen alkio {note}
+        //Jos ehto on epätosi, eli kyseessä on muutettu muistiinpano, otetaan palvelimen palauttama olio {response.data}
+      })
+      .catch((error) => {
+        console.error(error);
+        alert(`the note '${note.content}' was already deleted form server`);
+        setNotes(notes.filter((e) => e.id !== noteID));
+      });
   };
 
   const notesToShow = showAll

@@ -1,39 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-const PersonForm = (props) => {
-  return (
-    <form onSubmit={props.addPerson}>
-      <div>
-        name:
-        <input value={props.newName} onChange={props.handleNameChange} />
-      </div>
-      <div>
-        number:
-        <input value={props.newNumber} onChange={props.handleNumberChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  );
-};
-
-const Persons = ({ persons }) => {
-  console.log(persons);
-  return (
-    <div>
-      <ul>
-        {persons.map((person) => (
-          <li key={person.name}>
-            {person.name} {person.number}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+//import axios from "axios"; //funcionality moved to /services
+import personService from "./services/personService";
+import Persons from "./components/Persons";
+import PersonForm from "./components/PersonForm";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -45,15 +15,13 @@ const App = () => {
 
   useEffect(() => {
     console.log("effect");
-    axios
-    .get("http://localhost:3001/persons")
-    .then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      console.log("promise fulfilled, request data:", initialPersons);
+      setPersons(initialPersons);
     });
   }, []); //Will only run after the initial render (expect once in development)
 
-  console.log("render", persons.length, "notes");
+  //console.log("render", persons.length, "notes");
 
   const handleNameChange = (event) => {
     //console.log(event.target.value);
@@ -64,8 +32,9 @@ const App = () => {
     //console.log(event.target.value);
     setNewNumber(event.target.value);
   };
+  
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault(); //estää lomakkeen lähetyksen oletusarvoisen toiminnan, joka aiheuttaisi mm. sivun uudelleenlatautumisen
 
     //console.log("new name:", newName);
     const personObject = {
@@ -74,13 +43,30 @@ const App = () => {
     };
     // console.log(persons[0], personObject);
     // console.log(persons.some((element) => element.name === newName));
+
     if (persons.some((element) => element.name === newName)) {
       alert(`${newName} is already added to the phonebook`);
       setNewName("");
     } else {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      personService.create(personObject).then((returnedNote) => {
+        console.log(returnedNote);
+        setPersons(persons.concat(returnedNote)); //concat luo uuden taulukon ja lisää siihen {returnedNote} olion
+        setNewName(""); //tyhjennä name-input laatikko
+        setNewNumber("");
+      });
+    }
+  };
+
+  const removePerson = (person) => {
+    if (window.confirm(`delete ${person.name}`)) {
+      // console.log(`remove person id: `, id);
+      personService.removePerson(person.id).then((response) => {
+        console.log("promise fulfilled, request data:", response);
+        personService.getAll().then((initialPersons) => {
+          console.log("promise fulfilled, request data:", initialPersons);
+          setPersons(initialPersons);
+        });
+      });
     }
   };
 
@@ -95,7 +81,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       ></PersonForm>
       <h2>Numbers</h2>
-      <Persons persons={persons}></Persons>
+      <Persons persons={persons} removePerson={removePerson}></Persons>
     </div>
   );
 };
