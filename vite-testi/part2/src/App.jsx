@@ -2,6 +2,8 @@
 import Note from "./components/Note";
 import { useState, useEffect } from "react";
 import noteService from "./services/notes";
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 
 function App() {
   //const mapNotes = notes.map(note => note.content);
@@ -10,6 +12,8 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note");
   const [showAll, setshowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
+
 
   useEffect(() => {
     console.log("effect");
@@ -57,10 +61,14 @@ function App() {
         //jos ehto on tosi, otetaan uuteen taulukkoon suoraan vanha taulukon kyseinen alkio {note}
         //Jos ehto on epätosi, eli kyseessä on muutettu muistiinpano, otetaan palvelimen palauttama olio {response.data}
       })
+      // eslint-disable-next-line no-unused-vars
       .catch((error) => {
-        console.error(error);
-        alert(`the note '${note.content}' was already deleted form server`);
-        setNotes(notes.filter((e) => e.id !== noteID));
+        //console.error(error);
+        setErrorMessage(`Note '${note.content}' was already removed from server`)
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+        setNotes(notes.filter((e)   => e.id !== noteID));
       });
   };
 
@@ -72,6 +80,7 @@ function App() {
     <>
       <div>
         <h1>Notes</h1>
+        <Notification message={errorMessage}></Notification>
         <div>
           <button onClick={() => setshowAll(!showAll)}>
             show {showAll ? "important" : "all"}
@@ -90,6 +99,7 @@ function App() {
           <input value={newNote} onChange={handleNoteChange} />
           <button type="submit">save</button>
         </form>
+        <Footer></Footer>
       </div>
     </>
   );

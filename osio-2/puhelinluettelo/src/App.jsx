@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import personService from "./services/personService";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("name");
   const [newNumber, setNewNumber] = useState("+123 456 7890");
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState(null);
 
   // const result = persons.map((person) => person.name);
   // //console.log(result);
@@ -45,10 +48,20 @@ const App = () => {
     // console.log(persons.some((element) => element.name === newName));
 
     if (persons.some((element) => element.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
+      setMessageType('error');
+      setMessage(`${newName} is already added to the phonebook`);
       setNewName("");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
     } else {
       personService.create(personObject).then((returnedNote) => {
+        setMessageType('add');
+        setMessage(`${newName} added to the phonebook`);
+        setNewName("");
+        setTimeout(() => {
+          setMessage(null);
+        }, 3000);
         console.log(returnedNote);
         setPersons(persons.concat(returnedNote)); //concat luo uuden taulukon ja lisää siihen {returnedNote} olion
         setNewName(""); //tyhjennä name-input laatikko
@@ -59,6 +72,12 @@ const App = () => {
 
   const removePerson = (person) => {
     if (window.confirm(`delete ${person.name}`)) {
+      setMessageType('remove');
+      setMessage(`${person.name} removed from the phonebook`);
+      setNewName("");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
       // console.log(`remove person id: `, id);
       personService.removePerson(person.id).then((response) => {
         console.log("promise fulfilled, request data:", response);
@@ -73,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+<Notification message={message} type={messageType}></Notification>
       <PersonForm
         addPerson={addPerson}
         newName={newName}
