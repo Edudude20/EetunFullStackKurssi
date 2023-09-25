@@ -1,2 +1,2 @@
 # EetunFullStackKurssi
-Eetun FullStack-kurrin tehtävien palautusrepositorio
+Eetun FullStack-kurssitehtävien palautusrepositorio
